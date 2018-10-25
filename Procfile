@@ -1,1 +1,1 @@
-worker: funko.py
+worker: python funko.py
