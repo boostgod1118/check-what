@@ -79,5 +79,6 @@ async def on_message(message):
        await bot.send_message(message.channel, embed=embed)
 
 
-bot.run(os.getenv(TOKEN)
+bot.run(os.getenv(TOKEN))
+
 
