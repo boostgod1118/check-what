@@ -81,4 +81,3 @@ async def on_message(message):
 
 client.login('token')
   loop.run_until_complete(start(*args, **kwargs))
-  loop.close()
