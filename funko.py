@@ -61,16 +61,16 @@ print(fp)
 '''
 
 description = ''''''
-bot = commands.Bot(command_prefix='?', description=description)
+client = commands.client(command_prefix='?', description=description)
 
-@bot.event
+@client.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
 
-@bot.event
+@client.event
 async def on_message(message):
    if message.content.startswith('!funko'):
        name=(message.content).split(' ')[1:]
