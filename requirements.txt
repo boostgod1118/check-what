@@ -1,1 +1,9 @@
 discord.py
+ssl
+re
+requests
+urllib.request
+shutil
+os
+ commands
+ asyncio
