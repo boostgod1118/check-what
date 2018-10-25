@@ -22,7 +22,7 @@ token = 'NTA0ODA5OTgxMTI0ODA0NjA4.DrLaFQ.jYMP3a154DZJmcU2nfOZP-d7ZSM'
 
 @client.event
 async def on_ready():
-    print('{} started - FunkoFucked says hi :)'.format(client.user.name))
+    print('{} started - STARTED BITCH'.format(client.user.name))
 
 def site_search(keyword):
     product_urls = []
@@ -67,7 +67,7 @@ async def on_message(message):
         embed.add_field(name="Product Name", value="[{}]({})".format(name, url), inline=False)
         embed.add_field(name="Trending at", value="{}".format(price), inline=True)
         embed.add_field(name="Category", value="{}".format(category), inline=True)
-        embed.add_field(name="Who took stock?", value="FunkoFucked did", inline=True)
+        embed.add_field(name="What way?", value="SneakerSpeak", inline=True)
 
         await client.send_message(message.channel, embed=embed)
 
