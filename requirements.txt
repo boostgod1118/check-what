@@ -1,11 +1,2 @@
-
-ssl
-re
+discord.py 
 requests
-urllib.request
-shutil
-os
-discord
-commands
-asyncio
- get
