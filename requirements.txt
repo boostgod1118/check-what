@@ -1,5 +1,5 @@
 
-upgrade setuptools
+--upgrade setuptools
 ssl
 re
 requests
