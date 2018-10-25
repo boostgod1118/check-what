@@ -17,7 +17,7 @@ headers = {
 }
 
 client = discord.Client()
-token = 'NDcyMTc3MTcxODI2MjFunkoFuckedTookStockbP5gA1lYDHNUFOAoENGM'
+token = 'NTA0ODA5OTgxMTI0ODA0NjA4.DrLaFQ.jYMP3a154DZJmcU2nfOZP-d7ZSM'
 
 
 @client.event
