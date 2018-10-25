@@ -79,5 +79,5 @@ async def on_message(message):
        embed=main(name)
        await bot.send_message(message.channel, embed=embed)
 
-client.login('token')
-  loop.run_until_complete(start(*args, **kwargs))
+client.run('token')
+client.close()
