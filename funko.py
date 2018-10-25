@@ -51,7 +51,7 @@ def main(name):
     embed.add_field(name="Ebay Price", value=ebayPrice, inline=False)
     embed.add_field(name="Stashpedia Price", value=stashPrice, inline=False)
     embed.set_image(url=imageLink)
-
+    embed.add_field(name="SneakerSpeak",inline=False)
     return (embed)
 '''
 esl._create_default_https_context = ssl._create_unverified_context
