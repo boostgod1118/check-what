@@ -8,7 +8,7 @@ import discord
 from discord.ext import commands
 import asyncio
 from discord.utils import get
-TOKEN = ''
+bot_token = ''
 
 def stash(name):
     name=name.replace(' ','+')
@@ -79,6 +79,6 @@ async def on_message(message):
        await bot.send_message(message.channel, embed=embed)
 
 
-bot.run(os.getenv(TOKEN))
+bot.run(bot_token)
 
 
