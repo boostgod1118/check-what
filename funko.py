@@ -71,4 +71,4 @@ async def on_message(message):
 
         await client.send_message(message.channel, embed=embed)
 
-client.run(token)
+client.run(NTA0ODA5OTgxMTI0ODA0NjA4.DrLaFQ.jYMP3a154DZJmcU2nfOZP-d7ZSM)
