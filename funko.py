@@ -61,7 +61,7 @@ print(fp)
 '''
 
 description = ''''''
-client = commands.bot(command_prefix='?', description=description)
+bot = commands.bot(command_prefix='?', description=description)
 
 @client.event
 async def on_ready():
