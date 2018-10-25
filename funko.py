@@ -61,16 +61,17 @@ print(fp)
 '''
 
 description = ''''''
-bot = commands.Bot(command_prefix='?', description=description)
+client = discord.Client()
+client = commands.Bot(command_prefix='?', description=description)
 
-@bot.event
+@client.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
 
-@bot.event
+@client.event
 async def on_message(message):
    if message.content.startswith('!funko'):
        name=(message.content).split(' ')[1:]
@@ -78,5 +79,4 @@ async def on_message(message):
        embed=main(name)
        await bot.send_message(message.channel, embed=embed)
 
-
-bot.run(TOKEN)
+client.run('TOKEN')
