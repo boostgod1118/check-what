@@ -80,3 +80,4 @@ async def on_message(message):
        await bot.send_message(message.channel, embed=embed)
 
 client.run(TOKEN)
+client.close()
