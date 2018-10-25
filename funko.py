@@ -8,7 +8,7 @@ import discord
 from discord.ext import commands
 import asyncio
 from discord.utils import get
-token = ''
+
 
 def stash(name):
     name=name.replace(' ','+')
@@ -61,16 +61,16 @@ print(fp)
 '''
 
 description = ''''''
-client = commands.Client(command_prefix='?', description=description)
+bot = commands.Bot(command_prefix='?', description=description)
 
-@client.event
+@bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
 
-@client.event
+@bot.event
 async def on_message(message):
    if message.content.startswith('!funko'):
        name=(message.content).split(' ')[1:]
@@ -78,6 +78,5 @@ async def on_message(message):
        embed=main(name)
        await bot.send_message(message.channel, embed=embed)
 
-client.run('token')
 
-
+bot.run('token')
