@@ -1,82 +1,74 @@
-import ssl
-import re
-import requests
-import urllib.request
-import shutil
-import os
 import discord
-from discord.ext import commands
-import asyncio
-from discord.utils import get
-TOKEN = ''
+import requests
+import bs4 as bs
+import urllib.parse
+import re
 
-def stash(name):
-    name=name.replace(' ','+')
-    searchPage=requests.get('https://stashpedia.com/search?terms=%s'%(name))
-    searchPage=searchPage.text
-    link=re.findall('<a class="fill-height" href="(.*?)"', searchPage)[0]
-    link='https://stashpedia.com'+link
-    mainPage=requests.get(link)
-    mainPage=mainPage.text
-    number='#'+str(re.findall('<H5>#(.*?)<', mainPage)[0])
-    stashPrice=re.findall('<span class="gridValue">(.*?)<', searchPage)[0]
-    title=re.findall('<H4 class="toUpperCase">(.*?)<', searchPage)[0]
-    imageLink='https://stashpedia.com'+re.findall('img-responsive gridImage" src="(.*?)"', searchPage)[0]
-    return (stashPrice,title,number,imageLink,link)
+"""
+@FunkoFucked at it again - All y'all other groups keep being late, I had this shit made LAST YEAR.
+Stop flexing stupid shit like this in your shitty washed groups where you charge people way too much, 
+this is literally 12 minutes/76 lines of code while I had katyelisehenry shaking her ass in the background.
+"""
+r = requests.session()
 
-def ebay(search):
-    link='https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313.TR12.TRC2.A0.H0.XTEST.TRS0&_nkw=%s&_sacat=0&LH_TitleDesc=0&_osacat=0&_odkw=%%23101'%(search)
-    print(link)
-    searchPage=requests.get(link)
-    searchPage=searchPage.text
-    title = re.findall('<h3 class="s-item__title" role="text">(.*?)<', searchPage)[0]
-    price = re.findall('<span class="s-item__price">(.*?)<', searchPage)[0]
-    return price
-    pass
+search_url = 'https://stashpedia.com/search?terms='
+headers = {
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36 OPR/54.0.2952.60 FunkoFuckedTookStock'
+}
 
-def main(name):
-    stashPrice,title,number,imageLink,link=stash(name)
-    ebaySearch=(title+' '+number).replace(' ','+').replace('#','%23')
-    ebayPrice=ebay(ebaySearch)
-
-    mess='''**%s**
-*Ebay Price*
-%s
-*Stashpedia Price*
-%s
-*Link*
-<%s>
-'''%(title,ebayPrice,stashPrice,link)
-    embed = discord.Embed(title=title, url=link,description="", color=0x00ff00)
-    embed.add_field(name="Ebay Price", value=ebayPrice, inline=False)
-    embed.add_field(name="Stashpedia Price", value=stashPrice, inline=False)
-    embed.set_image(url=imageLink)
-
-    return (embed)
-'''
-esl._create_default_https_context = ssl._create_unverified_context
-fp = requests.get('https://twitter.com/BotBroker')
-fp = fp.text
-print(fp)
-'''
-
-description = ''''''
 client = discord.Client()
-client = commands.Bot(command_prefix='?', description=description)
+token = 'NDcyMTc3MTcxODI2MjFunkoFuckedTookStockbP5gA1lYDHNUFOAoENGM'
+
 
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+    print('{} started - FunkoFucked says hi :)'.format(client.user.name))
+
+def site_search(keyword):
+    product_urls = []
+    keyword = urllib.parse.quote_plus(keyword)
+    search_query = search_url + f'{keyword}'
+    print(search_query)
+    search_result = r.get(search_query, headers = headers)
+    soup = bs.BeautifulSoup(search_result.text, 'lxml')
+    # Find search result URLs
+    for find_url in soup.find_all('a', {'class': 'fill-height'}):
+        url = find_url.get('href')
+        url = f'https://stashpedia.com{url}'
+        product_urls.append(url)
+    first_result = product_urls[0]
+
+    return first_result
+
+def site_result(url):
+    result_parse = r.get(url, headers = headers)
+    soup = bs.BeautifulSoup(result_parse.text, 'lxml')
+    product_name = soup.find('img', {'id': 'mainImage'}).get('alt')
+    # for whatever reason, bs4 is not picking up H1 and H2 tags. that or i may have been dropped as a baby or somethin... extremely greedy regex will do for now
+    product_type = re.findall(r'''class="productTypeText">(.*)?<''', result_parse.text)
+    product_type = product_type[0]
+    product_img = soup.find('img', {'id': 'mainImage'}).get('src')
+    product_img = 'https://stashpedia.com' + product_img
+    # you can keep adding more stuff here
+    product_category = soup.find('div', {'itemprop': 'category'}).get_text()
+    product_price = re.findall(r'''class="valueText">(.*)?<''', result_parse.text)
+    product_price = product_price[0]
+    return product_name, product_type, product_img, product_category, product_price
+
 
 @client.event
 async def on_message(message):
-   if message.content.startswith('!funko'):
-       name=(message.content).split(' ')[1:]
-       name=' '.join(name)
-       embed=main(name)
-       await bot.send_message(message.channel, embed=embed)
+    if message.content.startswith('.stash '):
+        keyword = message.content.split('.stash ')[1]
+        url = site_search(keyword)
+        name, _type, image, category, price =  site_result(url)
+        embed = discord.Embed(color=15691628)
+        embed.set_thumbnail(url=image)
+        embed.add_field(name="Product Name", value="[{}]({})".format(name, url), inline=False)
+        embed.add_field(name="Trending at", value="{}".format(price), inline=True)
+        embed.add_field(name="Category", value="{}".format(category), inline=True)
+        embed.add_field(name="Who took stock?", value="FunkoFucked did", inline=True)
 
-client.run(os.getenv(TOKEN))
+        await client.send_message(message.channel, embed=embed)
+
+client.run(token)
