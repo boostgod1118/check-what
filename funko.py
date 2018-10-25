@@ -1,6 +1,6 @@
 import discord
 import requests
-import bs4 as bs
+from bs4 import BeautifulSoup 
 import urllib.parse
 import re
 
